@@ -1,8 +1,7 @@
-<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=favicon.ico><title></title><script src="//api.map.baidu.com/api?v=2.0&ak=tsMxe8AY20W88iOP6THUIi2qsogGFvsL"></script><link href=css/chunk-12483175.css rel=prefetch><link href=css/chunk-6bbc5352.css rel=prefetch><link href=css/chunk-76519094.css rel=prefetch><link href=js/chunk-12483175.js rel=prefetch><link href=js/chunk-6bbc5352.js rel=prefetch><link href=js/chunk-76519094.js rel=prefetch><link href=css/app.css rel=preload as=style><link href=css/chunk-vendors.css rel=preload as=style><link href=js/app.js rel=preload as=script><link href=js/chunk-vendors.js rel=preload as=script><link href=css/chunk-vendors.css rel=stylesheet><link href=css/app.css rel=stylesheet></head><body><noscript><strong>We're sorry but doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><div id=allmap></div><script src=js/chunk-vendors.js></script><script src=js/app.js></script></body></html><script>// 百度地图API功能
+<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=favicon.ico><title></title><script src="//api.map.baidu.com/api?v=2.0&ak=tsMxe8AY20W88iOP6THUIi2qsogGFvsL"></script><link href=css/chunk-8f916564.css rel=prefetch><link href=css/chunk-b69c7f34.css rel=prefetch><link href=css/chunk-f4ffbb68.css rel=prefetch><link href=js/chunk-8f916564.js rel=prefetch><link href=js/chunk-b69c7f34.js rel=prefetch><link href=js/chunk-f4ffbb68.js rel=prefetch><link href=css/app.css rel=preload as=style><link href=css/chunk-vendors.css rel=preload as=style><link href=js/app.js rel=preload as=script><link href=js/chunk-vendors.js rel=preload as=script><link href=css/chunk-vendors.css rel=stylesheet><link href=css/app.css rel=stylesheet></head><body><noscript><strong>We're sorry but doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><div id=allmap></div><script src=js/chunk-vendors.js></script><script src=js/app.js></script></body></html><script>// 百度地图API功能
   var map = new BMap.Map("allmap");
 
   var point = new BMap.Point(116.331398, 39.897445);
-  console.log(map.centerAndZoom);
   map.centerAndZoom(point, 12);
   var geolocation = new BMap.Geolocation();
 
@@ -11,15 +10,25 @@
       var mk = new BMap.Marker(r.point);
       map.addOverlay(mk);
       map.panTo(r.point);
-      console.log(r);
       let currentPositioning = {
         currentPositioning: {
           city: r.address.province + ' ' + r.address.city,
-          latitude: r.point.lng,
-          longitude: r.point.lat
+          latitude: r.point.lng.toString(),
+          longitude: r.point.lat.toString()
         }
       }
-      sessionStorage.currentPositioning = JSON.stringify(currentPositioning)
+      try {
+        sessionStorage.currentPositioning = JSON.stringify(currentPositioning)
+        let { latitude, longitude } = JSON.parse(sessionStorage.getItem('currentPositioning')).currentPositioning
+        if (latitude.toString() == currentPositioning.latitude.toString() && longitude.toString() == currentPositioning.longitude.toString()) {
+          sessionStorage.isAddressState = 0
+        } else {
+          sessionStorage.isAddressState = 1
+        }
+      } catch (error) {
+        sessionStorage.isAddressState = 0
+      }
+
     }
     else {
       alert('failed' + this.getStatus());
