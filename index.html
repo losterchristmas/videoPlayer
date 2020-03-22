@@ -14,17 +14,13 @@
         city: r.address.province + ' ' + r.address.city,
         latitude: r.point.lng.toString(),
         longitude: r.point.lat.toString()
-        // currentPositioning: {
         //   city:'永昌大厦',
         //   latitude: '114.156813',
         //   longitude: '22.626812'
-        // }
       }
       sessionStorage.currentPositioning = JSON.stringify(currentPositioning)
       try {
         let { latitude, longitude } = JSON.parse(sessionStorage.getItem('currentPositioning'))
-        console.log(latitude, longitude);
-        
         if (latitude.toString() == currentPositioning.latitude.toString() && longitude.toString() == currentPositioning.longitude.toString()) {
           sessionStorage.isAddressState = 0
         } else {
